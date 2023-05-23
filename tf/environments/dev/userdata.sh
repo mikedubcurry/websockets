@@ -29,10 +29,10 @@ sudo npm install pm2 -g
 sudo su - ec2-user << 'EOF'
 
 # clone repo
-git clone https://github.com/mikedubcurry/testapp.git /home/ec2-user/testapp
+git clone https://github.com/mikedubcurry/websockets.git /home/ec2-user/app
 
 # move nginx config file
-cd testapp
+cd app/app
 sudo mv ./testapp.conf /etc/nginx/conf.d/
 
 # start nginx

@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import sanitize from 'sanitize-html'
 
 dotenv.config();
 
@@ -11,16 +12,20 @@ const port = process.env.PORT || 3000;
 const notes: string[] = [];
 
 app.get('/', (req, res) => {
-    res.send(`Hello. Here are your notes: ${notes.join(', ')}`);
+    res.send(`Hello. Here are your notes: ${notes.join('<br/>')}`);
 });
 
 app.post('/notes', (req, res) => {
-    notes.push(req.body.note);
+    if(!req.body.note) {
+        res.status(400).send('Missing note');
+        return;
+    }
+    const note = sanitize(req.body.note);
+    notes.push(note);
+
     res.send(`Note added: ${req.body.note}`);
 });
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-});
+app.listen(port);
 
 
