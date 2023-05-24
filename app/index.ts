@@ -1,4 +1,6 @@
 import express from 'express'
+import { Server } from 'socket.io'
+import { createServer } from 'http'
 import dotenv from 'dotenv'
 import morgan from 'morgan'
 import sanitize from 'sanitize-html'
@@ -15,10 +17,21 @@ app.use(morgan('combined', {
     })
 }));
 
+const httpServer = createServer(app);
+
+const io = new Server(httpServer, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST']
+    }
+});
+
 const port = process.env.PORT || 3000;
 
+// some data
 const notes: string[] = [];
 
+// some api routes
 app.get('/', (req, res) => {
     res.send(`Hello. Here are your notes: ${notes.join('<br/>')}`);
 });
@@ -38,7 +51,22 @@ app.post('/notes', (req, res) => {
     }
 });
 
+// some auth-lite middleware
+io.use((socket, next) => {
+    const token = socket.handshake.auth.token;
+    if (token === 'secret') {
+        next();
+    } else {
+        next(new Error('invalid token'));
+    }
+});
 
-app.listen(port);
 
+io.on('connection', (socket) => {
+    console.log('a user connected');
+});
+
+httpServer.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+});
 
