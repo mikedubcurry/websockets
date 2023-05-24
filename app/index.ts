@@ -53,6 +53,7 @@ app.post('/notes', (req, res) => {
 
 // some auth-lite middleware
 io.use((socket, next) => {
+    console.log({ socket })
     const token = socket.handshake.auth.token;
     if (token === 'secret') {
         next();
