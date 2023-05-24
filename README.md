@@ -20,6 +20,8 @@ Pub/Sub broker
 - Redis
 - SNS
 
+check out: https://socket.io/docs/v4/redis-adapter/
+
 ## Methodologies
 
 To allow for rapid iteration on infrastructure, terraform will be used to 
@@ -28,5 +30,7 @@ process can be initiated by a GitHub Action workflow
 
 For load testing, we can deploy a playwright script to hit the test server with
 many concurrent requests
+check out: https://socket.io/docs/v4/load-testing/
 
-hi
+## Socket.io and PM2
+https://socket.io/docs/v4/pm2/

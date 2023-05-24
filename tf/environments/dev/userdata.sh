@@ -21,8 +21,8 @@ EOF
 # install node
 nvm install v20
 
-# install pm2
-sudo npm install pm2 -g
+# install pm2 for socket.io
+npm install -g @socket.io/pm2
 
 
 # as ec2-user
