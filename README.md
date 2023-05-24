@@ -34,3 +34,7 @@ check out: https://socket.io/docs/v4/load-testing/
 
 ## Socket.io and PM2
 https://socket.io/docs/v4/pm2/
+
+## Frontend
+can be hosted on S3/Cloudflare Pages
+React + Socket.io/client
