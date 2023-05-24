@@ -10,7 +10,9 @@ const app = express();
 app.use(express.json());
 app.use(morgan('combined', {
     skip: (req, res) => res.statusCode < 400,
-    stream: createWriteStream('./access.log', { flags: 'a' })
+    stream: createWriteStream('./access.log', {
+        flags: 'a'
+    })
 }));
 
 const port = process.env.PORT || 3000;
@@ -27,10 +29,15 @@ app.post('/notes', (req, res) => {
         return;
     }
     const note = sanitize(req.body.note);
-    notes.push(note);
-
-    res.send(`Note added: ${req.body.note}`);
+    console.log({ note });
+    if (note) {
+        notes.push(note);
+        res.send(`Note added: ${req.body.note}`);
+    } else {
+        res.status(400).json({ error: 'bad note' });
+    }
 });
+
 
 app.listen(port);
 
