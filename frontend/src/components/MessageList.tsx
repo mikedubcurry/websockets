@@ -1,8 +1,17 @@
+import { useEffect, useRef } from 'react'
 import type { Message } from '../types'
 export type MessageListProps = {
     messages: Message[]
+    followAtBottom?: boolean
 }
-export const MessageList = ({ messages }: MessageListProps) => {
+export const MessageList = ({ messages, followAtBottom }: MessageListProps) => {
+
+    const bottomRef = useRef<HTMLSpanElement>(null);
+    useEffect(() => {
+        if (followAtBottom && bottomRef.current) {
+            bottomRef.current.scrollTo()
+        }
+    }, [])
     return (
         <div className='flex flex-col gap-4 items-start'>
             {messages.map((message, index) => (
@@ -12,6 +21,7 @@ export const MessageList = ({ messages }: MessageListProps) => {
                     <span>{message.text}</span>
                 </div>
             ))}
+            <span ref={bottomRef} />
         </div>
     )
 }

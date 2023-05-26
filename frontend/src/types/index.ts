@@ -6,3 +6,9 @@ export type Message = {
     room: string;
     deleted: boolean;
 }
+
+export type Room = {
+    id: string
+    name: string
+    members: number
+}

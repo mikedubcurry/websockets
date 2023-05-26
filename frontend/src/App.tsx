@@ -1,16 +1,19 @@
+import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import socketLogo from './assets/socket.svg'
 import typescriptLogo from './assets/ts.svg'
-import { MessageList } from './components/MessageList'
-import { ChatInput } from './components/ChatInput'
-import { Message } from './types'
-import { useState } from 'react'
+
+import { ChatRoom } from './components/ChatRoom'
+import { RoomSelector } from './components/RoomSelector'
+import { Room } from './types'
 
 function App() {
-    const [messages, setMessages] = useState<Message[]>([])
-    const handleNewMessage = (message: Message) => {
-        setMessages([...messages, message])
-    }
+    const [currentRoom, setRoom] = useState<Room | null>(null);
+    const rooms: Room[] = [
+        { id: '123abc', name: 'chill', members: 4 },
+        { id: '867xyz', name: 'tech', members: 0 },
+        { id: '1213fc', name: 'general', members: 69 }
+    ]
     return (
         <main>
             <div className='bg-gray-500 p-8 flex flex-col items-center gap-4'>
@@ -22,10 +25,21 @@ function App() {
                     <img width={30} src={socketLogo} alt="Socket.io Logo" />
                 </div>
             </div>
-            <div className='flex flex-col gap-4 p-8'>
-                <MessageList messages={messages} />
-                <ChatInput handleNewMessage={handleNewMessage}/>
-            </div>
+
+            {currentRoom ? (
+                <>
+                    <div className='p-8 flex justify-between gap-4'>
+                        <span className='text-2xl'>Room: {currentRoom.name}</span>
+                        <button className='bg-white text-black rounded hover:text-blue-800 w-24' onClick={() => setRoom(null)}>Exit</button>
+                    </div>
+                    <ChatRoom />
+                </>
+            ) :
+                (
+                    <RoomSelector rooms={rooms} onRoomSelect={room => setRoom(room)} />
+
+                )
+            }
         </main>
     )
 }
