@@ -1,35 +1,33 @@
-import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import socketLogo from './assets/socket.svg'
+import typescriptLogo from './assets/ts.svg'
+import { MessageList } from './components/MessageList'
+import { ChatInput } from './components/ChatInput'
+import { Message } from './types'
+import { useState } from 'react'
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const [messages, setMessages] = useState<Message[]>([])
+    const handleNewMessage = (message: Message) => {
+        setMessages([...messages, message])
+    }
+    return (
+        <main>
+            <div className='bg-gray-500 p-8 flex flex-col items-center gap-4'>
+                <h1 className='text-4xl'>Chat App</h1>
+                <p className='font-serif font-bold'>Chat app using React, Typescript, and Socket.io</p>
+                <div className='flex gap-4'>
+                    <img width={30} src={reactLogo} alt="React Logo" />
+                    <img width={30} src={typescriptLogo} alt="Typescript Logo" />
+                    <img width={30} src={socketLogo} alt="Socket.io Logo" />
+                </div>
+            </div>
+            <div className='flex flex-col gap-4 p-8'>
+                <MessageList messages={messages} />
+                <ChatInput handleNewMessage={handleNewMessage}/>
+            </div>
+        </main>
+    )
 }
 
 export default App
