@@ -27,10 +27,15 @@ const io = new Server(httpServer, {
 
 const port = process.env.PORT || 3000;
 
+// some auth-lite middleware
 io.use((socket, next) => {
     console.log({ socket })
-    // do some auth check
-    next();
+    const token = socket.handshake.auth.token;
+    if (token === 'secret') {
+        next();
+    } else {
+        next(new Error('invalid token'));
+    }
 });
 
 

@@ -47,9 +47,9 @@ export const ChatStateContext = createContext<ChatState | null>(null);
 
 export const ChatStateProvider = ChatStateContext.Provider;
 
-export const useChatState: ChatState = () => {
+export const useChatState = () => {
     const chatState = useContext(ChatStateContext);
-    if(!chatState) {
+    if (!chatState) {
         throw Error("useChatState must be called within ChatStateProvider!!!")
     }
     return chatState

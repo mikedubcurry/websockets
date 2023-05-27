@@ -46,7 +46,6 @@ echo "PORT=3000" >> .env
 
 # install dependencies, build, and start app
 npm install
-npm run build
-npm run start
+pm2 start "npm run build && npm run start" --name app
 
 EOF
