@@ -11,8 +11,12 @@ export const ChatRoom = () => {
 
     return (
         <div className='flex flex-col gap-4 p-8'>
+            <div className="m-24">
             <MessageList messages={messages} followAtBottom />
-            <ChatInput handleNewMessage={handleNewMessage} />
+            </div>
+            <div className="fixed bottom-0 w-full -mx-8">
+                <ChatInput handleNewMessage={handleNewMessage} />
+            </div>
         </div>
 
     )
