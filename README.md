@@ -17,7 +17,7 @@ Web Socket Server
 - load balancer (ELB)
 
 Pub/Sub broker
-- Redis
+- Redis (socket.io redis adapter)
 - SNS
 
 check out: https://socket.io/docs/v4/redis-adapter/
@@ -75,3 +75,9 @@ Will need:
     - new_chat_message
     - new_direct_message
 
+## Todo:
+- [ ] add rds definition to terraform
+- [ ] write prisma migrations for required tables
+- [ ] add api routes for auth and user interaction ie add, remove, block
+- [ ] set up role gating for USER and ADMIN roles
+- [ ] implement IP level ban
