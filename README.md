@@ -38,3 +38,6 @@ https://socket.io/docs/v4/pm2/
 ## Frontend
 can be hosted on S3/Cloudflare Pages
 React + Socket.io/client
+
+## Diagrams
+https://www.tldraw.com/s/v2_c_biKqLKEU9NSWIFIcUMLWy?viewport=-221%2C-672%2C5317%2C2681&page=page%3AjsNPQs_8vL3XA8Q6etPkC
