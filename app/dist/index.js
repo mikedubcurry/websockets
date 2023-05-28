@@ -8,13 +8,15 @@ const socket_io_1 = require("socket.io");
 const http_1 = require("http");
 const dotenv_1 = __importDefault(require("dotenv"));
 const morgan_1 = __importDefault(require("morgan"));
-const sanitize_html_1 = __importDefault(require("sanitize-html"));
 const fs_1 = require("fs");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
+//const pubClient = createClient({
+//});
+//const subClient = pubClient.duplicate();
 app.use(express_1.default.json());
 app.use((0, morgan_1.default)('combined', {
-    skip: (req, res) => res.statusCode < 400,
+    skip: (_, res) => res.statusCode < 400,
     stream: (0, fs_1.createWriteStream)('./access.log', {
         flags: 'a'
     })
@@ -24,32 +26,51 @@ const io = new socket_io_1.Server(httpServer, {
     cors: {
         origin: '*',
         methods: ['GET', 'POST']
-    }
+    },
+    // adapter: createAdapter(pubClient, subClient)
 });
 const port = process.env.PORT || 3000;
-const notes = [];
-app.get('/', (req, res) => {
-    res.send(`Hello. Here are your notes: ${notes.join('<br/>')}`);
-});
-app.post('/notes', (req, res) => {
-    if (!req.body.note) {
-        res.status(400).send('Missing note');
-        return;
-    }
-    const note = (0, sanitize_html_1.default)(req.body.note);
-    console.log({ note });
-    if (note) {
-        notes.push(note);
-        res.send(`Note added: ${req.body.note}`);
+// some auth-lite middleware
+io.use((socket, next) => {
+    const token = socket.handshake.auth.token;
+    if (token === 'secret') {
+        next();
     }
     else {
-        res.status(400).json({ error: 'bad note' });
+        next(new Error('invalid token'));
     }
 });
-//app.listen(port);
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    socket.on('rooms', function (junk, callback) {
+        const rooms = getRooms();
+        if (typeof callback === 'function') {
+            callback(rooms);
+        }
+    });
+    socket.on('join_room', (room, callback) => {
+        if (room) {
+            console.log({ room });
+            socket.join(room);
+            socket.emit('room_joined', getRooms());
+            if (typeof callback === 'function') {
+                const rooms = getRooms();
+                console.log(rooms);
+                callback(rooms);
+            }
+        }
+    });
+    socket.on('leave_room', (room) => {
+        socket.leave(room);
+        socket.emit('room_leave', room);
+    });
+    socket.on('new_chat', (message, room) => {
+        socket.to(room).emit('new_message', JSON.stringify({ text: message, sender: socket.id, createdAt: new Date(), room }));
+    });
 });
 httpServer.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
+function getRooms(namespace = "") {
+    const connections = io.sockets.sockets;
+    return Array.from(io.of(namespace).adapter.rooms).filter(([i]) => !connections.has(i)).map(val => val[0]);
+}

@@ -11,6 +11,7 @@ export const MessageList = observer(({ followAtBottom }: MessageListProps) => {
     const chatState = useChatState();
 
     useEffect(() => {
+        console.log(chatState.messages)
         if (followAtBottom && bottomRef.current) {
             bottomRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }

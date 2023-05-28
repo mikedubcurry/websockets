@@ -7,20 +7,29 @@ import { socket } from './socket'
 
 import { ChatRoom } from './components/ChatRoom'
 import { RoomSelector } from './components/RoomSelector'
-import {RoomModal} from './components/RoomModal'
+import { RoomModal } from './components/RoomModal'
 import { Room } from './types'
 import { useRoomsState } from './state/RoomsState'
+import { useSocketsState } from './state/SocketState'
+import { useChatState } from './state/ChatState'
 
 function App() {
-    const [currentRoom, setRoom] = useState<Room | null>(null);
+    const [currentRoom, setRoom] = useState<string>('');
     const [isConnected, setIsConnected] = useState(socket.connected);
     const [fooEvents, setFooEvents] = useState<string[]>([]);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const roomState = useRoomsState();
+    const chatState = useChatState();
+    const socketState = useSocketsState();
 
     useEffect(() => {
         function onConnect() {
             setIsConnected(true);
+
+            socket.emit('rooms', "test", (res) => {
+                console.log({res})
+                roomState.setRooms(res)
+            })
         }
 
         function onDisconnect() {
@@ -31,18 +40,34 @@ function App() {
             setFooEvents((previous) => [...previous, value]);
         }
 
+        function onRooms(value: unknown) {
+            console.log(value)
+        }
+
+        function onMessage(value: string) {
+            chatState.onMessage(value)
+        }
+
+        socket.on('new_message', onMessage)
         socket.on('connect', onConnect);
         socket.on('disconnect', onDisconnect);
         socket.on('foo', onFooEvent);
+        socket.on('rooms', onRooms)
+
 
         return () => {
             socket.off('connect', onConnect);
             socket.off('disconnect', onDisconnect);
             socket.off('foo', onFooEvent);
+            socket.off('rooms', onRooms)
+            socket.off('new_message', onMessage)
         };
-    }, []);
+    }, [chatState, roomState]);
 
-    const joinRoom = (room: Room) => {
+    const joinRoom = (room: string) => {
+        console.log(socketState.socket)
+        //  socketState.socket.emit('join_room', room)
+        roomState.createRoom(room)
         setRoom(room)
     }
 
@@ -61,8 +86,8 @@ function App() {
             {currentRoom ? (
                 <>
                     <div className='p-8 flex justify-between gap-4'>
-                        <span className='text-2xl'>Room: {currentRoom.name}</span>
-                        <button className='bg-white text-black rounded hover:text-blue-800 w-24' onClick={() => setRoom(null)}>Exit</button>
+                        <span className='text-2xl'>Room: {currentRoom}</span>
+                        <button className='bg-white text-black rounded hover:text-blue-800 w-24' onClick={() => setRoom('')}>Exit</button>
                     </div>
                     <ChatRoom />
                 </>
@@ -76,11 +101,7 @@ function App() {
                             </div>
                         </section>
                         {modalOpen && (
-                                <RoomModal createAndJoinRoom={room => {
-                                    console.log(room)
-                                    roomState.createRoom(room)
-                                    setModalOpen(false)
-                                }}/>
+                            <RoomModal createAndJoinRoom={joinRoom} />
                         )}
                     </>
 

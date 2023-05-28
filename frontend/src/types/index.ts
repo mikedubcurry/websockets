@@ -8,7 +8,6 @@ export type Message = {
 }
 
 export type Room = {
-    id: string
     name: string
     members: number
 }

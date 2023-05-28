@@ -1,9 +1,9 @@
-import { MouseEventHandler, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { Room } from "../types"
 
 export type RoomSelectorProps = {
-    rooms: Room[]
-    onRoomSelect: (room: Room) => void
+    rooms: string[]
+    onRoomSelect: (room: string) => void
 }
 
 export const RoomSelector = ({ rooms, onRoomSelect }: RoomSelectorProps) => {
@@ -13,17 +13,17 @@ export const RoomSelector = ({ rooms, onRoomSelect }: RoomSelectorProps) => {
         <div className="grid grid-cols-3 justify-items-center w-8/12">
             {rooms.map((room, i) => (
                 <div
-                    key={room.id}
+                    key={room + i}
                     className={`p-8  bg-gray-500 transition-all duration-500 rounded${hovering === i ? '' : '-lg'
                         } flex flex-col gap-4 justify-between`}>
                     <span className="self-center font-bold text-lg uppercase">
-                        {room.name}
+                        {room}
                     </span>
                     <HoverButton text="Join Room" onClick={() => onRoomSelect(room)} onHover={() => {
                         setHovering(i)
                         return () => setHovering(null)
                     }} />
-                    <em className="text-blue-400">{room.members} active users</em>
+                    <em className="text-blue-400">69 active users</em>
                 </div>
             ))}
         </div>

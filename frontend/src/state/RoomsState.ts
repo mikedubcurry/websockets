@@ -1,24 +1,31 @@
 import { makeAutoObservable } from 'mobx'
 
-import { Room } from '../types'
 import { createContext, useContext } from 'react';
+import { SocketState } from './SocketState';
 
 export class RoomState {
-    public rooms: Room[];
+    public rooms: string[];
+    public socketState: SocketState
 
-    constructor(rooms: Room[] = []) {
-        this.rooms = rooms;
+    constructor(socketState: SocketState) {
+        this.socketState = socketState
+        this.rooms = [];
 
         makeAutoObservable(this);
     }
 
 
-    setRooms(rooms: Room[]) {
-        this.rooms = [...rooms,]
+    setRooms(rooms: string[]) {
+        console.log("setRooms", {rooms})
+        this.rooms = rooms
     }
 
-    createRoom(room: Room) {
+    createRoom(room: string) {
         // dispatch create room on socket
+        this.socketState.socket.emit('join_room', room, (rooms: string[]) => {
+            console.log(rooms)
+            this.setRooms([...rooms.filter(r => r !== this.socketState.socket.id),])
+        })
         // get all rooms
     }
 }
