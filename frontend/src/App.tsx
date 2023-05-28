@@ -7,15 +7,16 @@ import { socket } from './socket'
 
 import { ChatRoom } from './components/ChatRoom'
 import { RoomSelector } from './components/RoomSelector'
+import {RoomModal} from './components/RoomModal'
 import { Room } from './types'
-import { ConnectionState } from './components/ConnectionState'
-import { ConnectionManager } from './components/ConnectionManager'
-import { Events } from './components/Events'
+import { useRoomsState } from './state/RoomsState'
 
 function App() {
     const [currentRoom, setRoom] = useState<Room | null>(null);
     const [isConnected, setIsConnected] = useState(socket.connected);
     const [fooEvents, setFooEvents] = useState<string[]>([]);
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const roomState = useRoomsState();
 
     useEffect(() => {
         function onConnect() {
@@ -40,25 +41,21 @@ function App() {
             socket.off('foo', onFooEvent);
         };
     }, []);
-    const rooms: Room[] = [
-        { id: '123abc', name: 'chill', members: 4 },
-        { id: '867xyz', name: 'tech', members: 0 },
-        { id: '1213fc', name: 'general', members: 69 }
-    ]
+
+    const joinRoom = (room: Room) => {
+        setRoom(room)
+    }
 
     return (
         <main>
             <div className='bg-gray-500 p-8 flex flex-col items-center gap-4'>
-                <h1 className='text-4xl'>Chat App</h1>
+                <h1 className='text-4xl text-orange-400'>Chat App</h1>
                 <p className='font-serif font-bold'>Chat app using React, Typescript, and Socket.io</p>
                 <div className='flex gap-4'>
                     <img width={30} src={reactLogo} alt="React Logo" />
                     <img width={30} src={typescriptLogo} alt="Typescript Logo" />
                     <img width={30} src={socketLogo} alt="Socket.io Logo" />
                 </div>
-                <ConnectionState isConnected={isConnected}/>
-                <ConnectionManager isConnected={isConnected} />
-                <Events events={fooEvents} />
             </div>
 
             {currentRoom ? (
@@ -71,9 +68,22 @@ function App() {
                 </>
             ) :
                 (
-                    <div className='flex justify-center py-4'>
-                        <RoomSelector rooms={rooms} onRoomSelect={room => setRoom(room)} />
-                    </div>
+                    <>
+                        <section className='flex flex-col items-start'>
+                            <button className='bg-gray-500 p-2 rounded text-orange-400' onClick={() => setModalOpen(!modalOpen)}>New Room</button>
+                            <div className='flex justify-center py-4'>
+                                <RoomSelector rooms={roomState.rooms} onRoomSelect={joinRoom} />
+                            </div>
+                        </section>
+                        {modalOpen && (
+                                <RoomModal createAndJoinRoom={room => {
+                                    console.log(room)
+                                    roomState.createRoom(room)
+                                    setModalOpen(false)
+                                }}/>
+                        )}
+                    </>
+
 
                 )
             }

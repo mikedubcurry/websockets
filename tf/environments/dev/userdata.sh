@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# update yum, install git, nginx
+# update yum, install git, nginx, redis
 sudo yum update -y
 
 sudo yum install -y git
 
 sudo yum install -y nginx
+
+sudo yum install -y redis6
 
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 
@@ -38,6 +40,8 @@ sudo mv ./testapp.conf /etc/nginx/conf.d/
 # start nginx
 sudo systemctl enable nginx
 sudo systemctl start nginx
+sudo systemctl enable redis6
+sudo systemctl start redis6
 
 # create .env file
 touch .env
