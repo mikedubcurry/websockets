@@ -1,5 +1,5 @@
 import { authMiddleware } from './auth'
 
-export default [
+export const middlewares = [
     authMiddleware
 ]
