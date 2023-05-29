@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from 'bcrypt'
 
 export class AuthController {
 
@@ -12,7 +13,6 @@ export class AuthController {
         }
 
         const user = await this.prisma.user.findUnique({ where: { username: credentials.username } })
-        console.log(user)
 
     }
 
