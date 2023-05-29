@@ -1,0 +1,2 @@
+
+econst prisma = new PrismaClient();
