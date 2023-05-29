@@ -16,17 +16,14 @@ export class RoomState {
 
 
     setRooms(rooms: string[]) {
-        console.log("setRooms", {rooms})
         this.rooms = rooms
     }
 
     createRoom(room: string) {
         // dispatch create room on socket
         this.socketState.socket.emit('join_room', room, (rooms: string[]) => {
-            console.log(rooms)
             this.setRooms([...rooms.filter(r => r !== this.socketState.socket.id),])
         })
-        // get all rooms
     }
 }
 

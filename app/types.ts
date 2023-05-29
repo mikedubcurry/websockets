@@ -1,10 +1,25 @@
+export type User = {
+    id: number
+    username: string
+    friends?: User[]
+    blocks?: User[]
+}
+
 export type Room = {
-    id: string
+    id: number
     name: string
-    activeUsers: number
+    members: number
+    owner: User;
+}
+
+export type Message = {
+    id: number
+    text: string
+    sender: User
+    deleted: boolean
 }
 
 export type SocketData = {
     username: string
-    userId: string
+    userId: number
 }
