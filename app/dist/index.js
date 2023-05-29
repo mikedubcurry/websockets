@@ -13,12 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
+const client_1 = require("@prisma/client");
 dotenv_1.default.config();
-const server_1 = require("./server");
-const PORT = process.env.PORT;
+const controllers_1 = require("./controllers");
+const app_1 = require("./app");
+const routes_1 = require("./routes");
+const middlewares_1 = __importDefault(require("./middlewares"));
+const PORT = process.env.PORT || 3000;
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        server_1.httpServer.listen(PORT);
+        const prisma = new client_1.PrismaClient();
+        const controllers = {
+            AuthController: new controllers_1.AuthController(prisma)
+        };
+        const application = new app_1.App({ controllers, routes: routes_1.routes, middlewares: middlewares_1.default }, +PORT);
+        application.start();
     });
 }
 main().catch(console.error);

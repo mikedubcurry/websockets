@@ -3,6 +3,7 @@ import { Server } from 'socket.io'
 import { createServer } from 'http'
 import morgan from 'morgan'
 import { createWriteStream } from 'fs'
+//import { authMiddleware } from './middlewares'
 //import { createClient } from 'redis'
 //import { createAdapter } from '@socket.io/redis-adapter'
 
@@ -20,6 +21,7 @@ app.use(morgan('combined', {
         flags: 'a'
     })
 }));
+//app.use(authMiddleware)
 
 export const httpServer = createServer(app);
 
