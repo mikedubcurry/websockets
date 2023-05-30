@@ -4,7 +4,10 @@ import { Controller } from "../types";
 import { Request, RequestHandler, Response } from "express";
 
 export class AuthController extends Controller<PrismaClient> {
-   // [method_name: string]: RequestHandler
+    /**
+        * Responsible for generating responses for routes
+        *  - should call on Service classes to execute business logic
+        */
     public prisma: PrismaClient
 
     constructor(prisma: PrismaClient) {
@@ -14,16 +17,18 @@ export class AuthController extends Controller<PrismaClient> {
 
     public login: RequestHandler = async (req, res) => {
         res.send('hello')
-       // const credentials: Credentials = req.body
-       // if (!credentials.username || !credentials.password) {
-       //     throw Error('Bad Input')
-       // }
+        // call AuthService.login(credentials: Credentials)
+        // return response
+        // const credentials: Credentials = req.body
+        // if (!credentials.username || !credentials.password) {
+        //     throw Error('Bad Input')
+        // }
 
-       // const user = await this.prisma.user.findUnique({ where: { username: credentials.username } })
+        // const user = await this.prisma.user.findUnique({ where: { username: credentials.username } })
 
     }
 
-    public register: RequestHandler = async(req, res) => {
+    public register: RequestHandler = async (req, res) => {
 
     }
 

@@ -13,7 +13,7 @@ export type SocketData = {
     userId: string
 }
 
-export type WsHandler = (socket: Socket, next: (err: ExtendedError | undefined) => void) => void;
+export type WsHandler = (socket: Socket, next: (err?: ExtendedError | undefined) => void) => void;
 export type HttpHandler = RequestHandler
 
 export interface WsMiddleware  {
