@@ -1,4 +1,6 @@
 import type { RequestHandler } from "express"
+import { Socket } from "socket.io"
+import { ExtendedError } from "socket.io/dist/namespace"
 
 export type Room = {
     id: string
@@ -11,12 +13,27 @@ export type SocketData = {
     userId: string
 }
 
+export type WsHandler = (socket: Socket, next: (err: ExtendedError | undefined) => void) => void;
+export type HttpHandler = RequestHandler
+
+export interface WsMiddleware  {
+    type: 'ws'
+    handler: WsHandler
+}
+
+export interface HttpMiddleware  {
+    type: 'http'
+    handler: HttpHandler
+}
+
+export type Middleware = HttpMiddleware | WsMiddleware
+
 export interface Application<Deps> {
     controllers: {
         [controllerName: `${string}Controller`]: Controller<Deps>
     }
     routes: Route[]
-    middlewares: RequestHandler[]
+    middlewares: Middleware[]
 }
 
 export interface Route {
@@ -26,7 +43,7 @@ export interface Route {
 }
 
 export class Controller<Deps>{
-    [property: string]: RequestHandler | Deps | undefined
+    [property: string]: HttpHandler | Deps | undefined
 }
 
 export type ApplicationConfig<Deps> = Application<Deps>

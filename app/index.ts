@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { AuthController } from './controllers';
 import { App } from './app';
 import { routes } from './routes';
-import { middlewares } from './middlewares';
+import { httpMiddlewares, wsMiddlewares } from './middlewares';
 import { Application } from './types';
 
 dotenv.config();
@@ -17,7 +17,7 @@ async function main() {
         AuthController: new AuthController(prisma)
     }
 
-    const application = new App({ controllers, routes, middlewares }, +PORT)
+    const application = new App({ controllers, routes, middlewares: [...httpMiddlewares, ...wsMiddlewares] }, +PORT)
 
     application.start()
 }

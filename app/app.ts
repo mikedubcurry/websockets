@@ -1,4 +1,4 @@
-import { Application, ApplicationConfig, Controller, Route } from "./types";
+import { Application, ApplicationConfig, Controller, Middleware, Route } from "./types";
 import express, { RequestHandler } from 'express'
 import { PrismaClient } from "@prisma/client";
 import morgan from "morgan";
@@ -10,7 +10,7 @@ export class App implements Application<PrismaClient> {
         [controllerName: string]: Controller<PrismaClient>
     }
     public routes: Route[]
-    public middlewares: RequestHandler[]
+    public middlewares: Middleware[]
     private app: ReturnType<typeof express>
     private server!: ReturnType<typeof createServer>
     private port: number
@@ -36,7 +36,8 @@ export class App implements Application<PrismaClient> {
         }));
 
         this.middlewares.forEach(middleware => {
-            this.app.use(middleware)
+            if (middleware.type === 'http')
+                this.app.use(middleware.handler)
         })
 
         // register routes with handlers
@@ -52,9 +53,9 @@ export class App implements Application<PrismaClient> {
                 throw Error('Unknown controller or method name: ' + controllerName + " " + methodName + ' at: ' + path + ' ' + method)
             }
         })
-        
+
         this.server = createServer(this.app)
-        
+
 
     }
 

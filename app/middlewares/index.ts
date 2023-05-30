@@ -1,5 +1,4 @@
-import { authMiddleware } from './auth'
+export { middlewares as httpMiddlewares } from './http'
+export { middlewares as wsMiddlewares } from './ws'
 
-export const middlewares = [
-    authMiddleware
-]
+
