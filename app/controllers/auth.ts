@@ -15,7 +15,7 @@ export class AuthController extends Controller<PrismaClient, {}> {
     constructor(prisma: PrismaClient, authService: AuthService) {
         super()
         this.prisma = prisma;
-        this.authService = new AuthService(prisma)
+        this.authService = authService
     }
 
     public login: RequestHandler = async (req, res) => {

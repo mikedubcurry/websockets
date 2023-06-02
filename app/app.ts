@@ -1,13 +1,14 @@
 import { Application, ApplicationConfig, Controller, Middleware, Route } from "./types";
-import express, { RequestHandler } from 'express'
+import express from 'express'
 import { PrismaClient } from "@prisma/client";
 import morgan from "morgan";
 import { createWriteStream } from "fs";
 import { createServer } from "http";
+import { AuthService } from "./services/auth";
 
 export class App implements Application<PrismaClient> {
     public controllers: {
-        [controllerName: string]: Controller<PrismaClient>
+        [controllerName: string]: Controller<PrismaClient, {}>
     }
     public routes: Route[]
     public middlewares: Middleware[]
