@@ -30,7 +30,7 @@ export type Middleware = HttpMiddleware | WsMiddleware
 
 export interface Application<Deps> {
     controllers: {
-        [controllerName: `${string}Controller`]: Controller<Deps>
+        [controllerName: `${string}Controller`]: Controller<Deps, {}>
     }
     routes: Route[]
     middlewares: Middleware[]
@@ -42,8 +42,8 @@ export interface Route {
     handler: `${string}@${string}`
 }
 
-export class Controller<Deps>{
-    [property: string]: HttpHandler | Deps | undefined
+export class Controller<Deps, Services>{
+    [property: string]: HttpHandler | Deps | undefined | Services
 }
 
 export type ApplicationConfig<Deps> = Application<Deps>

@@ -4,7 +4,6 @@ import { AuthController } from './controllers';
 import { App } from './app';
 import { routes } from './routes';
 import { httpMiddlewares, wsMiddlewares } from './middlewares';
-import { Application } from './types';
 
 dotenv.config();
 
