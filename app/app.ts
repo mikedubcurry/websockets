@@ -49,6 +49,7 @@ export class App implements Application<PrismaClient> {
             }
             const h = this.controllers?.[controllerName]?.[methodName]
             if (h && typeof h === 'function') {
+                // @ts-ignore
                 this.app[method](path, h)
             } else {
                 throw Error('Unknown controller or method name: ' + controllerName + " " + methodName + ' at: ' + path + ' ' + method)

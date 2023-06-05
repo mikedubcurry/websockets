@@ -43,7 +43,7 @@ export interface Route {
 }
 
 export class Controller<Deps, Services>{
-    [property: string]: HttpHandler | Deps | undefined | Services
+    [property: string]: HttpHandler | Deps | undefined | Services 
 }
 
 export type ApplicationConfig<Deps> = Application<Deps>

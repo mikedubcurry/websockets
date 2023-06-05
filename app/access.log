@@ -1,1 +1,6 @@
 ::ffff:127.0.0.1 - - [24/May/2023:12:04:32 +0000] "GET /favicon.ico HTTP/1.1" 404 150 "http://localhost:5174/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0"
+::1 - - [05/Jun/2023:15:57:26 +0000] "POST /login HTTP/1.1" 422 46 "-" "PostmanRuntime/7.29.2"
+::1 - - [05/Jun/2023:15:57:31 +0000] "POST /login HTTP/1.1" 422 46 "-" "PostmanRuntime/7.29.2"
+::1 - - [05/Jun/2023:15:57:32 +0000] "POST /login HTTP/1.1" 422 46 "-" "PostmanRuntime/7.29.2"
+::1 - - [05/Jun/2023:15:57:42 +0000] "POST /login HTTP/1.1" 400 42 "-" "PostmanRuntime/7.29.2"
+::1 - - [05/Jun/2023:15:57:48 +0000] "POST /register HTTP/1.1" 422 69 "-" "PostmanRuntime/7.29.2"
